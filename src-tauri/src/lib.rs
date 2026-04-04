@@ -1,6 +1,9 @@
 mod window_info;
+mod main_backend;
 
+use std::sync::Arc;
 use window_info::get_foreground_window_info;
+use main_backend::MainBackend;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -9,6 +12,10 @@ fn greet(name: &str) -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+
+    let backend = Arc::new(MainBackend::new());
+    
+
     tracing_subscriber::fmt()
         .with_timer(tracing_subscriber::fmt::time::time())
         .with_target(true)
@@ -18,6 +25,7 @@ pub fn run() {
         .init();
 
     tracing::info!("应用启动");
+    backend.clone().startMainLoop();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
