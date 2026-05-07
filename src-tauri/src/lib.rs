@@ -1,10 +1,12 @@
 mod database;
 mod tracker;
 mod window_info;
+mod main_backend;
 
 use database::{AggregatedUsage, UsageRecord};
 use tracker::Tracker;
 use window_info::get_foreground_window_info;
+use main_backend::MainBackend;
 
 use rusqlite::Connection;
 use std::sync::{Arc, Mutex};
@@ -75,6 +77,10 @@ fn today_date_str() -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+
+    let backend = Arc::new(MainBackend::new());
+    
+
     tracing_subscriber::fmt()
         .with_timer(tracing_subscriber::fmt::time::time())
         .with_target(true)
@@ -84,6 +90,7 @@ pub fn run() {
         .init();
 
     tracing::info!("应用启动");
+    backend.clone().startMainLoop();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
@@ -91,7 +98,7 @@ pub fn run() {
             let app_data_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_data_dir)?;
             let db_path = app_data_dir.join("time-lens.db");
-            tracing::info!("数据库路径: {:?}", db_path);
+            tracing::info!("数据库路径：{:?}", db_path);
 
             let conn = database::init(&db_path)?;
             let db = Arc::new(Mutex::new(conn));

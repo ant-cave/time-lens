@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import Sidebar from './components/Sidebar.vue'
 
+console.log('hello world')
+
 const sidebarRef = ref(null)
 </script>
 
