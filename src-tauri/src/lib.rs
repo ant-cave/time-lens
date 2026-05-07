@@ -78,7 +78,7 @@ fn today_date_str() -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
 
-    let backend = Arc::new(MainBackend::new());
+    let backend = MainBackend::new();
     
 
     tracing_subscriber::fmt()
@@ -90,7 +90,7 @@ pub fn run() {
         .init();
 
     tracing::info!("应用启动");
-    backend.clone().startMainLoop();
+    backend.startMainLoop();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())

@@ -1,6 +1,5 @@
 
 use chrono::Local;
-use std::sync::Arc;
 
 pub struct MainBackend{
     
@@ -15,17 +14,17 @@ impl MainBackend{
         "hello world".to_string()
     }
 
-    pub fn startMainLoop(self: Arc<Self>){
+    pub fn startMainLoop(self){
         tracing::info!("start main loop");
-        tauri::async_runtime::spawn(async move {
-            self.mainLoop().await;
+        std::thread::spawn(move || {
+            self.mainLoop();
         });
     }
 
-    pub async fn mainLoop(self: Arc<Self>){
+    pub fn mainLoop(self){
         loop {
             tracing::info!("{}", Local::now());
-            tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+            std::thread::sleep(std::time::Duration::from_secs(1));
         }
     }
 }
