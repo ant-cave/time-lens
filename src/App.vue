@@ -6,9 +6,9 @@ const sidebarRef = ref(null)
 </script>
 
 <template>
-  <div style="display: flex; height: 100vh; overflow: hidden;">
+  <div class="app-container">
     <Sidebar ref="sidebarRef" />
-    <main style="flex: 1; overflow: auto;">
+    <main class="main-content">
       <router-view />
     </main>
   </div>
@@ -26,5 +26,17 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow: auto;
+  height: 100%;
 }
 </style>
